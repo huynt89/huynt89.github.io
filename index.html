@@ -61,39 +61,6 @@
 	 	 </div>
 	 </div>
 
-	    <!-- CMD runner (calls local Node server /run) -->
-	    <div class="cmd-runner" style="padding:16px;margin:16px;border:1px solid #ddd;border-radius:6px;">
-	        <h3>Chạy lệnh CMD (server)</h3>
-	        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-	            <input id="cmdInput" placeholder="Nhập lệnh (ví dụ: dir)" style="flex:1;padding:8px;" />
-	            <input id="tokenInput" placeholder="Secret token" style="width:200px;padding:8px;" />
-	            <button id="runBtn" style="padding:8px 12px;">Run</button>
-	        </div>
-	        <pre id="cmdOutput" style="white-space:pre-wrap;background:#0f0f0f;color:#e6e6e6;padding:12px;border-radius:4px;margin-top:12px;max-height:300px;overflow:auto;"></pre>
-	        <p style="font-size:12px;color:#777;margin-top:8px;">Lưu ý: trình duyệt chỉ gọi API `/run` trên server Node.js cục bộ; server chỉ chạy các lệnh trong whitelist.</p>
-	    </div>
-
-		 	 <script>
-			document.getElementById('runBtn').addEventListener('click', async function(){
-				const cmd = document.getElementById('cmdInput').value.trim();
-				const token = document.getElementById('tokenInput').value.trim();
-				const out = document.getElementById('cmdOutput');
-				out.textContent = 'Đang gửi yêu cầu...';
-				if(!cmd){ out.textContent = 'Vui lòng nhập lệnh.'; return }
-				try{
-					const res = await fetch('/run', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json', 'x-secret-token': token },
-						body: JSON.stringify({ cmd })
-					});
-					if(res.status === 401){ out.textContent = 'Token không hợp lệ.'; return }
-					if(res.status === 403){ out.textContent = 'Lệnh không được phép.'; return }
-					const data = await res.json();
-					out.textContent = data.stdout || data.stderr || JSON.stringify(data);
-				}catch(err){ out.textContent = 'Lỗi: '+err.message }
-			});
-		</script>
-
-		 	 <script src="js/script.js"></script>
+	 	 <script src="js/script.js"></script>
 </body>
 </html>
